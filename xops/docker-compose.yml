@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=${POSTGRES_DB_LOGIN}
+      - POSTGRES_PASSWORD=${POSTGRES_DB_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB_NAME}
+      - PGUSER=${POSTGRES_DB_LOGIN}
+      - POSTGRES_DB_HOST
+    expose:
+      - ${POSTGRES_DB_PORT}
+    hostname: ${POSTGRES_DB_HOST}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      timeout: 2s
+      retries: 15
+
+  migrations_runner:
+    build: .
+    command: python manage.py migrate
+    environment:
+      - POSTGRES_DB_LOGIN
+      - POSTGRES_DB_PASSWORD
+      - POSTGRES_DB_HOST
+      - POSTGRES_DB_PORT
+      - POSTGRES_DB_NAME
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG
+      - DJANGO_ALLOWED_HOSTS
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB_LOGIN
+      - POSTGRES_DB_PASSWORD
+      - POSTGRES_DB_HOST
+      - POSTGRES_DB_PORT
+      - POSTGRES_DB_NAME
+      - DJANGO_SECRET_KEY
+      - DJANGO_DEBUG
+      - DJANGO_ALLOWED_HOSTS
+    depends_on:
+      migrations_runner:
+        condition: service_completed_successfully
