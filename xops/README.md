@@ -1,4 +1,4 @@
-### Запуск
+### Запуск из этой папки
 ```
 cat > env.sh << EOF
 export DJANGO_SECRET_KEY='cyhl=4u*!$!0r@kn9g9767afnu6dppt5q#*@t)u_+h(gy9d_!j'
@@ -13,6 +13,26 @@ EOF
 
 source env.sh
 docker-compose up
+```
+
+```
+POST 127.0.0.1:8000/api/xops/visited_links
+json: {
+    "links": [
+        "https://vk.com/im?peers=c39_312394923_282848403&sel=c48",
+        "https://stackoverflow.com/questions/44113335/extract-domain-from-url-in-python"
+    ]
+}
+Сохраняется кука device_id
+
+GET 127.0.0.1:8000/api/xops/visited_domains?from={unix_timestamp}&to={unix_timestamp2}
+{
+    "status": "ok",
+    "domains": [
+        "vk.com",
+        "stackoverflow.com"
+    ]
+}
 ```
 ### Тестирование
 ```
