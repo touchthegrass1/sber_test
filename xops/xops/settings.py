@@ -77,11 +77,16 @@ WSGI_APPLICATION = 'xops.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        "OPTIONS": {
-            "service": "xops_service",
-            "passfile": ".xops_pgpass",
-        },
+        'ENGINE':   'django.db.backends.postgresql',
+        'NAME':     os.environ['POSTGRES_DB_NAME'],
+        'USER':     os.environ['POSTGRES_DB_LOGIN'],
+        'PASSWORD': os.environ['POSTGRES_DB_PASSWORD'],
+        'HOST':     os.environ['POSTGRES_DB_HOST'],
+        'PORT':     os.environ['POSTGRES_DB_PORT'],
+
+        "TEST": {
+            "NAME": "xops_test_db",
+        }
     }
 }
 
