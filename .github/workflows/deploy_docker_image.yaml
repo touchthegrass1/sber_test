@@ -2,7 +2,7 @@ name: Deploy to docker registry
 on:
   push:
     branches: ["master"]
-    paths: ["*.py"]
+    paths: ["**.py"]
 
 jobs:
   build:
