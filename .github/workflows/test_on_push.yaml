@@ -8,6 +8,21 @@ on:
 jobs:
   run_tests:
     runs-on: [ubuntu-latest]
+    container: python:3.10.13-bullseye
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: xops_test_db
+          PGUSER: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@master
       - uses: actions/setup-python@v1
@@ -20,3 +35,12 @@ jobs:
 
       - name: Run tests
         run: python3 manage.py test
+        env:
+          POSTGRES_DB_LOGIN: postgres
+          POSTGRES_DB_PASSWORD: postgres
+          POSTGRES_DB_HOST: postgres
+          POSTGRES_DB_PORT: 5432
+          POSTGRES_DB_NAME: xops_test_db
+          DJANGO_SECRET_KEY: 'cyhl=4u*!$!0r@kn9g9767afnu6dppt5q#*@t)u_+h(gy9d_!j'
+          DJANGO_DEBUG: True
+          DJANGO_ALLOWED_HOSTS: '127.0.0.1,localhost,172.17.0.1'
