@@ -15,7 +15,6 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: xops_test_db
           PGUSER: postgres
         options: >-
           --health-cmd pg_isready
