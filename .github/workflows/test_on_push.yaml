@@ -1,9 +1,8 @@
 on:
   push:
-    tags:
-      - '!refs/tags/*'
-    branches:
-      - '*'
+    tags: ["!refs/tags/*"]
+    branches: ['*']
+    paths: ["*.py", "requirements.txt"]
 
 jobs:
   run_tests:
